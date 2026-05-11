@@ -17,7 +17,7 @@
   ║                                                                ║
   ║  SECURITY CONTROLS                                             ║
   ║  [SEC-01] CSP — whitelists Supabase + Anthropic origins        ║
-  ║  [SEC-02] All DOM writes via textContent / createElement       ║
+  ║  [SEC-02] All DOM writes via textContent / createElement        ║
   ║  [SEC-03] URL allowlist — http/https only                      ║
   ║  [SEC-04] crypto.getRandomValues() for local tokens            ║
   ║  [SEC-05] Input length limits on all fields                    ║
@@ -32,9 +32,9 @@
   ║  [SEC-14] Sessions managed by Supabase JWT (auto-refresh)      ║
   ║  [SEC-15] Row Level Security — DB-enforced data isolation      ║
   ║  [SEC-16] Role-based access control (admin / user)             ║
-  ║  [SEC-17] Brute-force protection via Supabase Auth settings    ║
+  ║  [SEC-17] Brute-force protection via Supabase Auth settings     ║
   ║  [SEC-18] Admin cannot delete/demote last admin (DB function)  ║
-  ║  [SEC-19] Password min 8 chars, complexity enforced client-side║
+  ║  [SEC-19] Password min 8 chars, complexity enforced client-side ║
   ║  [SEC-20] Session invalidated via supabase.auth.signOut()      ║
   ╚══════════════════════════════════════════════════════════════════╝
 -->
@@ -43,25 +43,16 @@
 <meta name="supabase-url"      content="https://iqiagyopcngticsnejtn.supabase.co">
 <meta name="supabase-anon-key" content="sb_publishable_r_pvoEMlzu98cWoMHW-Lzg_nRxzPLuF">
 <!-- ─────────────────────────────────────────────────────────────────── -->
-<!-- [SEC-01] CSP — updated to allow Supabase and Anthropic origins -->
+<!-- [SEC-01] CSP — updated to allow Supabase, Anthropic, and local assets -->
 <meta http-equiv="Content-Security-Policy"
   content="default-src 'self';
-           script-src 'nonce-BM2025NONCE' https://cdn.jsdelivr.net;
+           script-src 'self' 'nonce-BM2025NONCE' https://cdn.jsdelivr.net;
            style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-           font-src https://fonts.gstatic.com;
-           img-src https://www.google.com data: blob:;
-           connect-src https://*.supabase.co https://*.supabase.com wss://*.supabase.co https://api.anthropic.com;
+           font-src 'self' https://fonts.gstatic.com;
+           img-src 'self' https://www.google.com data: blob:;
+           connect-src 'self' https://*.supabase.co https://*.supabase.com wss://*.supabase.co https://api.anthropic.com https://cdn.jsdelivr.net;
            base-uri 'none'; object-src 'none'; form-action 'none';">
-<title>BetterMark - Bookmark Manager</title>
-
-<!-- Favicons -->
-<link rel="icon" type="image/x-icon" href="/favicon.ico?v=2">
-<link rel="icon" type="image/svg+xml" href="/favicon.svg?v=2">
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=2">
-<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png?v=2">
-<link rel="shortcut icon" href="/favicon.ico?v=2" />
-<link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png?v=2">
-<meta name="theme-color" content="#07080f">
+<title>BetterMark v4.0 — Bookmark Manager</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <!-- Supabase JS client (ESM build via CDN) -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" nonce="BM2025NONCE"></script>
