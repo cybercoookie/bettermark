@@ -421,13 +421,13 @@ body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;back
     </div>
     <div class="auth-error" id="authError" role="alert"></div>
     <!-- Login -->
-    <form id="loginForm" onsubmit="return false;" autocomplete="on">
+    <form id="loginForm" autocomplete="on">
       <div class="auth-field"><label for="authEmail">Email</label><input type="email" id="authEmail" placeholder="you@example.com" maxlength="254" autocomplete="email"></div>
       <div class="auth-field"><label for="authPass">Password</label><input type="password" id="authPass" placeholder="••••••••" maxlength="128" autocomplete="current-password"></div>
       <button type="submit" class="auth-btn" id="btnLogin">SIGN IN</button>
     </form>
     <!-- Register -->
-    <form id="registerForm" style="display:none;" onsubmit="return false;" autocomplete="on">
+    <form id="registerForm" style="display:none;" autocomplete="on">
       <div class="auth-field"><label for="regDisplay">Display Name</label><input type="text" id="regDisplay" placeholder="Your Name" maxlength="60" autocomplete="name"></div>
       <div class="auth-field"><label for="regEmail">Email</label><input type="email" id="regEmail" placeholder="you@example.com" maxlength="254" autocomplete="email"></div>
       <div class="auth-field">
@@ -643,7 +643,7 @@ body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;back
 <div class="mo" id="createUserModal" role="dialog" aria-modal="true">
   <div class="modal" style="max-width:420px;">
     <div class="mh"><div class="mt vt-m">CREATE USER</div><button class="ibt" id="btnCloseCreateUser">✕</button></div>
-    <form class="mb" onsubmit="return false;" autocomplete="off">
+    <form class="mb" id="createUserForm" autocomplete="off">
       <div class="field"><label>Display Name *</label><input type="text" id="cuDisplay" placeholder="Full Name" maxlength="60" autocomplete="off"></div>
       <div class="field"><label>Email *</label><input type="email" id="cuEmail" placeholder="user@example.com" maxlength="254" autocomplete="off"></div>
       <div class="field"><label>Temporary Password *</label><input type="password" id="cuPass" placeholder="min 8 chars" maxlength="128" autocomplete="new-password"></div>
@@ -665,7 +665,7 @@ body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;back
 <div class="mo" id="profileModal" role="dialog" aria-modal="true">
   <div class="modal" style="max-width:420px;">
     <div class="mh"><div class="mt">MY PROFILE</div><button class="ibt" id="btnCloseProfile">✕</button></div>
-    <form class="mb" onsubmit="return false;" autocomplete="on">
+    <form class="mb" id="profileForm" autocomplete="on">
       <div class="field"><label>Display Name</label><input type="text" id="profDisplay" maxlength="60" autocomplete="name"></div>
       <div style="height:1px;background:linear-gradient(90deg,transparent,var(--border2),transparent);margin:2px 0;"></div>
       <div style="font-family:var(--fm);font-size:10px;color:var(--text3);letter-spacing:1px;">CHANGE PASSWORD (leave blank to keep current)</div>
@@ -1546,13 +1546,16 @@ function wireEvents(){
     txt(document.getElementById('authError'),'');
     setTimeout(()=>document.getElementById('regDisplay')?.focus(),50);
   });
-  // Login form — button click AND form submit (Enter key)
+  // Forms — preventDefault via JS (not inline onsubmit, blocked by CSP)
+  document.getElementById('loginForm').addEventListener('submit',e=>{e.preventDefault();tryLogin();});
+  document.getElementById('registerForm').addEventListener('submit',e=>{e.preventDefault();tryRegister();});
+  document.getElementById('createUserForm').addEventListener('submit',e=>e.preventDefault());
+  document.getElementById('profileForm').addEventListener('submit',e=>e.preventDefault());
+  // Login button + Enter key
   document.getElementById('btnLogin').addEventListener('click',tryLogin);
-  document.getElementById('loginForm').addEventListener('submit',tryLogin);
   document.getElementById('authPass').addEventListener('keydown',e=>{if(e.key==='Enter')tryLogin();});
-  // Register form — button click AND form submit (Enter key)
+  // Register button
   document.getElementById('btnRegister').addEventListener('click',tryRegister);
-  document.getElementById('registerForm').addEventListener('submit',tryRegister);
   document.getElementById('regPass').addEventListener('input',function(){const c=checkPasswordStrength(this.value);document.getElementById('pr-len').classList.toggle('ok',c.len);document.getElementById('pr-up').classList.toggle('ok',c.upper);document.getElementById('pr-num').classList.toggle('ok',c.num);});
   // Sidebar
   document.getElementById('sbNav').addEventListener('click',ev=>{
