@@ -40,8 +40,8 @@
 -->
 <!-- ─── CONFIGURE THESE TWO VALUES ─────────────────────────────────── -->
 <!-- Get them from: Supabase Dashboard → Project Settings → API        -->
-<meta name="supabase-url"      content="https://iqiagyopcngticsnejtn.supabase.co">
-<meta name="supabase-anon-key" content="sb_publishable_r_pvoEMlzu98cWoMHW-Lzg_nRxzPLuF">
+<meta name="supabase-url"      content="YOUR_SUPABASE_URL">
+<meta name="supabase-anon-key" content="YOUR_SUPABASE_ANON_KEY">
 <!-- ─────────────────────────────────────────────────────────────────── -->
 <!-- [SEC-01] CSP — updated to allow Supabase, Anthropic, and local assets -->
 <meta http-equiv="Content-Security-Policy"
@@ -421,14 +421,14 @@ body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;back
     </div>
     <div class="auth-error" id="authError" role="alert"></div>
     <!-- Login -->
-    <div id="loginForm">
+    <form id="loginForm" onsubmit="return false;" autocomplete="on">
       <div class="auth-field"><label for="authEmail">Email</label><input type="email" id="authEmail" placeholder="you@example.com" maxlength="254" autocomplete="email"></div>
       <div class="auth-field"><label for="authPass">Password</label><input type="password" id="authPass" placeholder="••••••••" maxlength="128" autocomplete="current-password"></div>
-      <button class="auth-btn" id="btnLogin">SIGN IN</button>
-    </div>
+      <button type="submit" class="auth-btn" id="btnLogin">SIGN IN</button>
+    </form>
     <!-- Register -->
-    <div id="registerForm" style="display:none;">
-      <div class="auth-field"><label for="regDisplay">Display Name</label><input type="text" id="regDisplay" placeholder="Your Name" maxlength="60"></div>
+    <form id="registerForm" style="display:none;" onsubmit="return false;" autocomplete="on">
+      <div class="auth-field"><label for="regDisplay">Display Name</label><input type="text" id="regDisplay" placeholder="Your Name" maxlength="60" autocomplete="name"></div>
       <div class="auth-field"><label for="regEmail">Email</label><input type="email" id="regEmail" placeholder="you@example.com" maxlength="254" autocomplete="email"></div>
       <div class="auth-field">
         <label for="regPass">Password</label>
@@ -440,8 +440,8 @@ body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;back
         </div>
       </div>
       <div class="auth-field"><label for="regPass2">Confirm Password</label><input type="password" id="regPass2" placeholder="repeat password" maxlength="128" autocomplete="new-password"></div>
-      <button class="auth-btn" id="btnRegister">CREATE ACCOUNT</button>
-    </div>
+      <button type="submit" class="auth-btn" id="btnRegister">CREATE ACCOUNT</button>
+    </form>
   </div>
 </div>
 
@@ -643,13 +643,13 @@ body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;back
 <div class="mo" id="createUserModal" role="dialog" aria-modal="true">
   <div class="modal" style="max-width:420px;">
     <div class="mh"><div class="mt vt-m">CREATE USER</div><button class="ibt" id="btnCloseCreateUser">✕</button></div>
-    <div class="mb">
-      <div class="field"><label>Display Name *</label><input type="text" id="cuDisplay" placeholder="Full Name" maxlength="60"></div>
-      <div class="field"><label>Email *</label><input type="email" id="cuEmail" placeholder="user@example.com" maxlength="254"></div>
+    <form class="mb" onsubmit="return false;" autocomplete="off">
+      <div class="field"><label>Display Name *</label><input type="text" id="cuDisplay" placeholder="Full Name" maxlength="60" autocomplete="off"></div>
+      <div class="field"><label>Email *</label><input type="email" id="cuEmail" placeholder="user@example.com" maxlength="254" autocomplete="off"></div>
       <div class="field"><label>Temporary Password *</label><input type="password" id="cuPass" placeholder="min 8 chars" maxlength="128" autocomplete="new-password"></div>
       <div class="field"><label>Role</label><select id="cuRole"><option value="user">User</option><option value="admin">Admin</option></select></div>
       <div class="auth-error" id="cuError"></div>
-    </div>
+    </form>
     <div class="mf"><button class="btn" id="btnCancelCreateUser">Cancel</button><button class="btn v" id="btnSaveCreateUser">Create User</button></div>
   </div>
 </div>
@@ -665,14 +665,14 @@ body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;back
 <div class="mo" id="profileModal" role="dialog" aria-modal="true">
   <div class="modal" style="max-width:420px;">
     <div class="mh"><div class="mt">MY PROFILE</div><button class="ibt" id="btnCloseProfile">✕</button></div>
-    <div class="mb">
-      <div class="field"><label>Display Name</label><input type="text" id="profDisplay" maxlength="60"></div>
+    <form class="mb" onsubmit="return false;" autocomplete="on">
+      <div class="field"><label>Display Name</label><input type="text" id="profDisplay" maxlength="60" autocomplete="name"></div>
       <div style="height:1px;background:linear-gradient(90deg,transparent,var(--border2),transparent);margin:2px 0;"></div>
       <div style="font-family:var(--fm);font-size:10px;color:var(--text3);letter-spacing:1px;">CHANGE PASSWORD (leave blank to keep current)</div>
       <div class="field"><label>New Password</label><input type="password" id="profNewPass" maxlength="128" autocomplete="new-password"></div>
       <div class="field"><label>Confirm Password</label><input type="password" id="profNewPass2" maxlength="128" autocomplete="new-password"></div>
       <div class="auth-error" id="profError"></div>
-    </div>
+    </form>
     <div class="mf"><button class="btn" id="btnCancelProfile">Cancel</button><button class="btn p" id="btnSaveProfile">Save Changes</button></div>
   </div>
 </div>
@@ -1530,11 +1530,29 @@ function showToast(msg,type=''){txt(document.getElementById('tmsg'),msg);const t
 // ══════════════════════════════════════════════════════════════════
 function wireEvents(){
   // Auth tabs
-  document.getElementById('tabLogin').addEventListener('click',()=>{document.getElementById('loginForm').style.display='block';document.getElementById('registerForm').style.display='none';document.getElementById('tabLogin').classList.add('active');document.getElementById('tabRegister').classList.remove('active');txt(document.getElementById('authError'),'');});
-  document.getElementById('tabRegister').addEventListener('click',()=>{document.getElementById('loginForm').style.display='none';document.getElementById('registerForm').style.display='block';document.getElementById('tabRegister').classList.add('active');document.getElementById('tabLogin').classList.remove('active');txt(document.getElementById('authError'),'');});
+  document.getElementById('tabLogin').addEventListener('click',()=>{
+    document.getElementById('loginForm').style.display='block';
+    document.getElementById('registerForm').style.display='none';
+    document.getElementById('tabLogin').classList.add('active');
+    document.getElementById('tabRegister').classList.remove('active');
+    txt(document.getElementById('authError'),'');
+    setTimeout(()=>document.getElementById('authEmail')?.focus(),50);
+  });
+  document.getElementById('tabRegister').addEventListener('click',()=>{
+    document.getElementById('loginForm').style.display='none';
+    document.getElementById('registerForm').style.display='block';
+    document.getElementById('tabRegister').classList.add('active');
+    document.getElementById('tabLogin').classList.remove('active');
+    txt(document.getElementById('authError'),'');
+    setTimeout(()=>document.getElementById('regDisplay')?.focus(),50);
+  });
+  // Login form — button click AND form submit (Enter key)
   document.getElementById('btnLogin').addEventListener('click',tryLogin);
+  document.getElementById('loginForm').addEventListener('submit',tryLogin);
   document.getElementById('authPass').addEventListener('keydown',e=>{if(e.key==='Enter')tryLogin();});
+  // Register form — button click AND form submit (Enter key)
   document.getElementById('btnRegister').addEventListener('click',tryRegister);
+  document.getElementById('registerForm').addEventListener('submit',tryRegister);
   document.getElementById('regPass').addEventListener('input',function(){const c=checkPasswordStrength(this.value);document.getElementById('pr-len').classList.toggle('ok',c.len);document.getElementById('pr-up').classList.toggle('ok',c.upper);document.getElementById('pr-num').classList.toggle('ok',c.num);});
   // Sidebar
   document.getElementById('sbNav').addEventListener('click',ev=>{
